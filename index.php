@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 echo "<a href='setup.php'><button>Installer la base de données</button></a> <br />";
 # Connexion sécurisée à la base de données
 $servername = "localhost:3360"; 
@@ -15,15 +17,22 @@ if ($conn->connect_error) {
 }
 echo "Connexion réussie à la base de données MySQL <br /><br />";
 
-# Échappement des variables pour éviter les attaques XSS
-if (isset($_GET['name'])) {
-    $name = htmlspecialchars($_GET['name'], ENT_QUOTES, 'UTF-8');
-    echo "Salut " . $name . "<br />";
+// Vérifier si le nom d'utilisateur est stocké dans la session
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+    echo "Salut, " . htmlspecialchars($username) . "!";
+
+    # Bouton de déconnexion
+    echo "<a href='logout.php'><button>Se déconnecter</button></a>";
+} else {
+    echo "Vous n'êtes pas connecté.";
+
+    # Boutons de redirection
+    echo "<a href='signup.php'><button>S'inscrire</button></a>";
+    echo "<a href='login.php'><button>Se connecter</button></a>";
 }
 
-# Boutons de redirection
-echo "<a href='signup.php'><button>S'inscrire</button></a>";
-echo "<a href='login.php'><button>Se connecter</button></a>";
+
 
 # Fermer la connexion
 $conn->close();

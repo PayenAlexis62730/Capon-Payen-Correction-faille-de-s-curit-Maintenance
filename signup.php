@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 # Connexion sécurisée à la base de données
 $servername = "localhost:3360"; 
 $username = "root"; 
@@ -27,14 +29,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
 
+        // Stocker le nom d'utilisateur dans la session
+        $_SESSION['username'] = $username;
+
         /////////////// avant
         // header("Location: index.php");
         //////////////////////////
 
         /////////////// après
-        header("Location: index.php?name=" . urlencode($username));
+        header("Location: index.php");
         //////////////////////////
-        
+
         exit();
     } else {
         echo "Erreur : " . $stmt->error;
