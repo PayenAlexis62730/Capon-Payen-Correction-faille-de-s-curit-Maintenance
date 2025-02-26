@@ -7,7 +7,7 @@ Qu'on les corrige.
 
 ---
 
-## Issue 1 : Les Injection SQL 
+## Issue 1 : Les Injections SQL 
 
 ### Le gros Problème :
 L'injection SQL est une vulnérabilité critique qui permettrait un hacker d'injecter des commandes SQL malveillantes dans des requêtes de base de données. 
@@ -32,7 +32,7 @@ $stmt->execute();
 - Même si un hacker injecte du code malveillant, celui-ci sera interprété comme des données, et non comme une commande SQL, donc il a le seum et la BDD est protéger.
 - Les informations sensibles des utilisateurs sont mieux sécurisées.
 
-## Issue 2 : Les Mot de passe
+## Issue 2 : Les Mots de passes
 
 ### Le gros Problème :
 En laissant kes mots de passe en clair, Les mots de passe sont stockés sans aucune protection. Si la base de données est compromise ou hacker, les mots de passe des utilisateurs seront exposés aux utilisateurs maveillants.
