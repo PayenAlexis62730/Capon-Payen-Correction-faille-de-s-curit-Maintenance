@@ -7,7 +7,7 @@ Qu'on les corrige.
 
 ---
 
-## Issue 1 : Les Injection SQL e
+## Issue 1 : Les Injection SQL 
 
 ### Le gros Problème :
 L'injection SQL est une vulnérabilité critique qui permettrait un hacker d'injecter des commandes SQL malveillantes dans des requêtes de base de données. 
@@ -31,3 +31,38 @@ $stmt->execute();
 - Les requêtes préparées permettent de séparer les données des commandes SQL .
 - Même si un hacker injecte du code malveillant, celui-ci sera interprété comme des données, et non comme une commande SQL, donc il a le seum et la BDD est protéger.
 - Les informations sensibles des utilisateurs sont mieux sécurisées.
+
+## Issue 2 : Les Mot de passe
+
+### Le gros Problème :
+En laissant kes mots de passe en clair, Les mots de passe sont stockés sans aucune protection. Si la base de données est compromise ou hacker, les mots de passe des utilisateurs seront exposés aux utilisateurs maveillants.
+De plus l'ID de session reste inchangé après la connexion, ce qui expose l'application à des attaques de fixation de session.
+
+### Code vulnérable :
+
+```php
+$sql = "INSERT INTO Users (username, password) VALUES ('$username', '$password')";
+```
+
+### Notre Solution :
+
+Pour éviter cela le but ici est de hasher les mots de passe et de vérifier le mot de passe
+
+```php
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+```
+
+Deplus on va vérifier que lors de la connexion que le mot de passe de l'utilisateur avec le hashage dans la BDD soit le même.
+
+```php
+if (password_verify($password, $hashed_password)) {
+    $_SESSION['name'] = $name;
+    session_regenerate_id(true); // Sécurisation de la session
+}
+```
+Enfin on va régénérer l'id du compte après une connexion réussie cela permettra de  sécuriser la session de l'utilisateur des attaques de session fixe.
+
+### Pourquoi c'est mieux ? :
+
+- Les mots de passe Hasher rendent impossible la récupération des mots de passe en clair.
+- La régénération de l'ID de session empêche les hackers de voler ou manipuler l'ID de session d'un utilisateur.
